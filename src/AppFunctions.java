@@ -45,8 +45,7 @@ public class AppFunctions {
                         ret.append(each.getName());
                         ret.append("\n");
                     }
-                } else {
-                    ret.append(each.getName());
+                } else {                    ret.append(each.getName());
                     ret.append("\n");
                 }
             }
