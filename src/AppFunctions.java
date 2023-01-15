@@ -1,4 +1,3 @@
-import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.util.Arrays;
@@ -33,9 +32,12 @@ public class AppFunctions {
 
     }
 
-    public String display(String path) {
+    public String display(String path) {         //filtreaza fisierele audio si directoarele
         StringBuilder ret = new StringBuilder();
-        String[] audioFormats = new String[]{".wav", ".mp3", ".m4a", ".ogg", ".raw", ".m4p"};
+        String[] audioFormats = new String[]{".aac", ".aiff", ".amr", ".ape", ".au", ".flac", ".m4a", ".m4p", ".midi",
+                ".mp3", ".ogg", ".opus", ".ra", ".wav", ".wma", ".dsf", ".dff", ".dsd", ".sds",
+                ".sd2", ".mscx", ".mscz", ".mod", ".raw", ".snd", ".337", ".sun", ".xm", ".it",
+                ".s3m", ".mtm"};
         File dir = new File(path);
         File[] content = dir.listFiles();
         if (content != null) {
@@ -62,12 +64,30 @@ public class AppFunctions {
         return name.substring(lastIndexOf);
     }
 
-    public void find(String song) {
-
+    public String find(String fileName, String directoryPath) {
+        String ret = "File Not Found !";
+        File directory = new File(directoryPath);
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    ret = find(fileName, file.getAbsolutePath());
+                } else if (fileName.equalsIgnoreCase(file.getName())) {
+                    ret = "The path is : " + file.getAbsolutePath();
+                    break;
+                }
+            }
+        }
+        return ret;
     }
 
-    public void rename(String song) {
-
+    public String rename(String dst, String src) {
+        File newFilename = new File(parent.currentPath + "/" + dst);
+        File oldFilename = new File(parent.currentPath + "/" + src);
+        if(oldFilename.renameTo(newFilename)){
+            return "File renamed succesfully";
+        }
+        return "Unable to rename file !";
     }
 
     public String cd(String param) {
