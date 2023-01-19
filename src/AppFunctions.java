@@ -1,16 +1,17 @@
+import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.util.Arrays;
 
 public class AppFunctions {
-    private AppWindow parent;
+    private final AppWindow parent; //
 
     public AppFunctions(AppWindow parent) {
         this.parent = parent;
     }
 
     static String getPath() {
-        String currentPath = null;
+        String currentPath;
         try {
             currentPath = new java.io.File(".").getCanonicalPath();
         } catch (IOException e) {
@@ -64,7 +65,7 @@ public class AppFunctions {
         return name.substring(lastIndexOf);
     }
 
-    public String find(String fileName, String directoryPath) {
+    public String find(String fileName, String directoryPath) { //gasirea recursiva a fisiserului in ierarhia de fisiere
         String ret = "File Not Found !";
         File directory = new File(directoryPath);
         File[] files = directory.listFiles();
@@ -90,7 +91,7 @@ public class AppFunctions {
         return "Unable to rename file !";
     }
 
-    public String cd(String param) {
+    public String cd(String param) { // functia de schimbare a directorului
         param = param.trim();
         if (param.equals("..")) {
             int lastIndexOf = parent.currentPath.lastIndexOf("/");
@@ -107,4 +108,6 @@ public class AppFunctions {
         }
         return "Directory changed succesfully !";
     }
+
+
 }

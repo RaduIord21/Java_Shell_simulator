@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyAdapter;
 
 
 import static java.lang.Thread.sleep;
@@ -9,7 +7,7 @@ import static java.lang.Thread.sleep;
 public class AppWindow{
     private JTextArea textBox;
     private int lastLine = 0;
-    public String currentPath = "";
+    public String currentPath;
     private JFrame frame;// frame creat
 
     AppWindow(){
@@ -32,19 +30,24 @@ public class AppWindow{
 
 
     public void startProcessingCommands() throws InterruptedException {
-        String currentCommand = "";
-        String song = "";
+        String currentCommand;
         AppFunctions fun = new AppFunctions(this);
-        String path = "";
         while (true){
 
             currentCommand = this.getCommand();
             if (currentCommand.startsWith("!exit")) {
                 frame.dispose();
                 System.exit(0);
-            } else if (currentCommand.equals("!help\n")) {
-                this.printInBox("This is the list of commands :\n !exit = Exit the program \n !display = Displays the files that are in the current directory\n !play <song> = Plays the selected file \n" +
-                        "\n !rename = starts the renaming process");
+            } else if (currentCommand.startsWith("!help")) { //comanda care afiseaza instructiunile folosibile
+                this.printInBox("""
+                        This is the list of commands :
+                         !exit = Exit the program\s
+                         !display = Displays the files that are in the current directory
+                         !play <song> = Plays the selected file\s
+                         !rename = starts the renaming process\s
+                         !cd for changing the directory (!cd .. = changes to the parent Directory\s
+                         !find <file> finds a file  in the hierarchy of files
+                         !clear to clear the window""");
             } else if (currentCommand.startsWith("!play ")) { // ruleaza fisierul audio
                 int firstIndex = currentCommand.indexOf(" ");
                 fun.play(currentCommand.substring(firstIndex).trim());
@@ -62,12 +65,15 @@ public class AppWindow{
             } else if (currentCommand.startsWith("!cd ")){ //schimba directorul
                 this.printInBox(fun.cd(currentCommand.split(" ")[1]));
             }
-
+            else if (currentCommand.startsWith("!clear")){  //curata fereastra
+                this.textBox.setText(null);
+                lastLine = 0;
+            }
         }
     }
 
-    private void printInBox(String str){
-        this.textBox.append(str + "\n");
+    private void printInBox(String str){ // afiseaza in zona de text astfel incat cursorul sa se afle pe linie noua de fiecare data
+        this.textBox.append(str + "\n"); // cand este afisata o comanda
         this.textBox.setCaretPosition(this.textBox.getText().length());
     }
 
